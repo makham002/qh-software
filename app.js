@@ -70,7 +70,7 @@ function render(){
         <div class="actions">
           <button class="btn" type="button" data-buy="${ci}:${pi}">Buy now</button>
           ${p.trial ? `<button class="btn ghost" type="button" data-trial="${esc(p.name)}">Free trial</button>` : ""}
-          <a class="btn ghost" href="https://wa.me/92${CONTACT.whatsapp.replace(/\D/g, "").replace(/^0/, "")}" target="_blank" rel="noopener">Ask for a demo</a>
+          <a class="btn ghost" href="https://wa.me/92${CONTACT.whatsapp.replace(/\D/g, "").replace(/^0/, "")}" target="_blank" rel="noopener">Ask a question</a>
         </div>
         </div>
       </article>`).join("");
