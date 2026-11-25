@@ -9,9 +9,27 @@ const CATEGORIES = [
     id: "windows", name: "Windows software", short: "Windows",
     blurb: "Desktop software for Windows 10 and 11. Pay once for lifetime access.",
     products: [
-      { name: "Tailoring Shop Manager", price: 10000, priceNote: "Lifetime access", platform: "Windows 10/11",
-        desc: "Run your tailoring shop from one place: customer measurements, orders, payments and delivery dates.",
-        features: ["Save measurements for every customer", "Track orders and delivery dates", "Record advances and balances", "Print order slips"] }
+      { name: "Tailors", price: 10000, priceNote: "Lifetime access",
+        tags: ["Windows desktop", "Works fully offline", "Urdu interface"],
+        desc: "Complete shop management for tailors, in Urdu. Keep every customer's measurements, track each order from booking to delivery, and see the day's earnings at a glance.",
+        features: [
+          "Customer management: add, search and track all customers",
+          "Order tracking: order number, karegar, delivery date and status (pending, ready, delivered)",
+          "Full suit measurements with tabs for Qameez/Shalwar, Coat and Waistcoat",
+          "AI measurement scan: photograph a handwritten slip and the measurements fill in automatically",
+          "WhatsApp notifications: tell customers their order is ready in one click",
+          "Printable order receipt for every customer",
+          "Dashboard with daily stats, pending orders and revenue",
+          "Automatic weekly backup of all your data",
+          "Offline license, locked to your computer"
+        ],
+        shots: [
+          { src: "/img/tailors-dashboard.webp", caption: "Dashboard: customers, orders, ready and pending, earnings" },
+          { src: "/img/tailors-orders.webp", caption: "All orders with karegar, dates, status and balance" },
+          { src: "/img/tailors-measurements.webp", caption: "Measurements with Qameez/Shalwar, Coat and Waistcoat tabs, plus AI scan" },
+          { src: "/img/tailors-customers.webp", caption: "Search customers by name or mobile number" },
+          { src: "/img/tailors-backup.webp", caption: "Automatic weekly backup and Excel export" }
+        ] }
     ]
   },
   {
@@ -38,14 +56,22 @@ function render(){
   main.innerHTML = CATEGORIES.map((cat, ci) => {
     total += cat.products.length;
     const cards = cat.products.map((p, pi) => `
-      <article class="card">
+      <article class="card${p.shots ? " wide" : ""}">
+        ${p.shots ? `<div class="shots">
+          <button class="shot-main" type="button" data-shot="${ci}:${pi}:0" aria-label="View screenshots of ${esc(p.name)}"><img src="${esc(p.shots[0].src)}" alt="${esc(p.shots[0].caption)}"></button>
+          <div class="thumbs">${p.shots.map((s, si) => `<button type="button" data-shot="${ci}:${pi}:${si}" aria-label="${esc(s.caption)}"><img src="${esc(s.src)}" alt="" loading="lazy"></button>`).join("")}</div>
+          <p class="tiny-muted">Tap a screenshot to enlarge. Customer details are blurred.</p>
+        </div>` : ""}
+        <div class="card-info">
         <div class="card-top"><div class="icon">${esc(p.name[0])}</div><span class="price">${rs(p.price)}</span></div>${p.priceNote ? `<span class="label">${esc(p.priceNote)}</span>` : ""}
         <div><h3>${esc(p.name)}</h3><p class="desc">${esc(p.desc)}</p></div>
         <ul class="feats">${p.features.map(f => `<li>${esc(f)}</li>`).join("")}</ul>
-        <div class="meta">${[p.platform, p.version, p.size].filter(Boolean).map(x => `<span class="chip">${esc(x)}</span>`).join("")}</div>
+        <div class="meta">${[...(p.tags || []), p.platform, p.version, p.size].filter(Boolean).map(x => `<span class="chip">${esc(x)}</span>`).join("")}</div>
         <div class="actions">
           <button class="btn" type="button" data-buy="${ci}:${pi}">Buy now</button>
           ${p.trial ? `<button class="btn ghost" type="button" data-trial="${esc(p.name)}">Free trial</button>` : ""}
+          <a class="btn ghost" href="https://wa.me/92${CONTACT.whatsapp.replace(/\D/g, "").replace(/^0/, "")}" target="_blank" rel="noopener">Ask for a demo</a>
+        </div>
         </div>
       </article>`).join("");
     return `<section class="shelf" id="${esc(cat.id)}"><div class="wrap">
@@ -108,4 +134,31 @@ document.getElementById("contact-form").addEventListener("submit", e => {
   const body = v("c-msg") + "\n\nName: " + v("c-name") + (v("c-phone") ? "\nWhatsApp: " + v("c-phone") : "");
   document.getElementById("formmsg").hidden = false;
   location.href = "mailto:" + CONTACT.email + "?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body);
+});
+
+/* screenshot lightbox */
+const lb = document.getElementById("lightbox");
+let lbShots = [], lbIdx = 0;
+function showShot(){
+  const s = lbShots[lbIdx];
+  document.getElementById("lb-img").src = s.src;
+  document.getElementById("lb-img").alt = s.caption;
+  document.getElementById("lb-cap").textContent = s.caption + "  (" + (lbIdx + 1) + " of " + lbShots.length + ")";
+}
+document.addEventListener("click", e => {
+  const t = e.target.closest("[data-shot]");
+  if (!t) return;
+  const [ci, pi, si] = t.dataset.shot.split(":").map(Number);
+  lbShots = CATEGORIES[ci].products[pi].shots; lbIdx = si; showShot();
+  lb.hidden = false; document.getElementById("lb-close").focus();
+});
+document.getElementById("lb-prev").addEventListener("click", () => { lbIdx = (lbIdx + lbShots.length - 1) % lbShots.length; showShot(); });
+document.getElementById("lb-next").addEventListener("click", () => { lbIdx = (lbIdx + 1) % lbShots.length; showShot(); });
+document.getElementById("lb-close").addEventListener("click", () => { lb.hidden = true; });
+lb.addEventListener("click", e => { if (e.target === lb) lb.hidden = true; });
+document.addEventListener("keydown", e => {
+  if (lb.hidden) return;
+  if (e.key === "Escape") lb.hidden = true;
+  if (e.key === "ArrowLeft") document.getElementById("lb-prev").click();
+  if (e.key === "ArrowRight") document.getElementById("lb-next").click();
 });

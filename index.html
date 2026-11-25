@@ -4,21 +4,21 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>QH Soft</title>
-<meta name="description" content="Software for businesses in Pakistan by Qazi Hussain Shah, telecom engineer and developer. Tailoring shop management app with lifetime access. Pay by JazzCash or Easypaisa.">
+<meta name="description" content="Software for businesses in Pakistan by Qazi Hussain Shah, telecom engineer and developer. Tailors: shop management app for tailors in Urdu, with lifetime access. Pay by JazzCash or Easypaisa.">
 <meta name="theme-color" content="#0B6B4D">
 <meta property="og:title" content="QH Soft">
 <meta property="og:description" content="Practical software for Pakistani businesses. Pay once for lifetime access.">
 <meta property="og:type" content="website">
-<link rel="icon" href="/favicon.svg?v=2" type="image/svg+xml">
+<link rel="icon" href="/favicon.svg?v=3" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap">
-<link rel="stylesheet" href="/styles.css?v=2">
-<script src="/app.js?v=2" defer></script>
+<link rel="stylesheet" href="/styles.css?v=3">
+<script src="/app.js?v=3" defer></script>
 </head>
 <body>
 <nav><div class="wrap">
-  <a class="brand" href="#top"><img src="/favicon.svg?v=2" width="30" height="30" alt="">QH <span>Soft</span></a>
+  <a class="brand" href="#top"><img src="/favicon.svg?v=3" width="30" height="30" alt="">QH <span>Soft</span></a>
   <div class="navlinks" id="navlinks">
     <a href="#about">About</a>
     <a href="#how">How to buy</a>
@@ -43,7 +43,7 @@
     </div>
   </div>
   <div class="win" aria-hidden="true">
-    <div class="bar"><span>Tailoring Shop Manager</span><span class="ctrls"><span>—</span><span>□</span><span>✕</span></span></div>
+    <div class="bar"><span>Tailors</span><span class="ctrls"><span>—</span><span>□</span><span>✕</span></span></div>
     <div class="body">
       <div class="row done"><span>Lifetime access activated</span><span class="mono">JazzCash · Rs 10,000</span></div>
       <div class="row done"><span>Measurements saved</span><span class="mono">Customer #142</span></div>
@@ -83,6 +83,8 @@
   <div class="shelf-head"><div><span class="label">FAQ</span><h2>Common questions</h2></div></div>
   <div class="faq">
     <details open><summary>What does lifetime access mean?</summary><p>You pay once and keep using the app for as long as you like. There are no monthly fees.</p></details>
+    <details><summary>Is the app in Urdu?</summary><p>Yes. Tailors is fully in Urdu, so you and your staff can use it without any trouble.</p></details>
+    <details><summary>Does it need internet?</summary><p>No. Tailors works fully offline on your computer, and your data stays with you. Only the AI measurement scan and sending WhatsApp messages need an internet connection.</p></details>
     <details><summary>Can I see the app before buying?</summary><p>Yes. Message me and I'll show you how it works, so you know it fits your shop.</p></details>
     <details><summary>What if I need help setting it up?</summary><p>Message me after buying and I'll help you install it and get started.</p></details>
     <details><summary>Will my antivirus or Windows warn me when installing?</summary><p>New apps sometimes show a Windows SmartScreen notice. Click <b>More info</b>, then <b>Run anyway</b>. Every installer is scanned before upload.</p></details>
@@ -123,6 +125,13 @@
     <p class="small-muted">After paying, send the receipt screenshot with the app name on WhatsApp or by email. You then receive the download link and your license.</p>
     <button class="btn btn-center" id="dlg-done" type="button">I've paid, where do I send the receipt?</button>
     <p class="formmsg" id="dlg-msg" hidden></p>
+  </div>
+</div>
+<div class="overlay" id="lightbox" hidden>
+  <div class="lb" role="dialog" aria-modal="true" aria-label="Screenshots">
+    <div class="lb-top"><span id="lb-cap" class="lb-cap"></span><button class="x" id="lb-close" aria-label="Close">×</button></div>
+    <img id="lb-img" src="" alt="">
+    <div class="lb-nav"><button class="btn ghost" id="lb-prev" type="button">Previous</button><button class="btn ghost" id="lb-next" type="button">Next</button></div>
   </div>
 </div>
 </body>

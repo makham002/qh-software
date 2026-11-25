@@ -181,3 +181,21 @@ footer .wrap{padding-block:28px;display:flex;justify-content:space-between;gap:1
 .notfound{min-height:80vh;display:grid;align-content:center;justify-items:start;gap:16px;padding-block:48px}
 .notfound h1{font-size:clamp(32px,5vw,52px)}
 .notfound p{color:var(--muted)}
+
+/* product with screenshots */
+.card.wide{grid-column:1/-1;display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:28px;align-items:start}
+.card-info{display:flex;flex-direction:column;gap:14px;min-width:0}
+.card:not(.wide) .card-info{flex:1}
+.shots{display:grid;gap:10px;min-width:0}
+.shots button{padding:0;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--soft);cursor:zoom-in;display:block}
+.shots img{display:block;width:100%;height:auto}
+.shot-main img{aspect-ratio:16/10;object-fit:cover;object-position:top left}
+.thumbs{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.thumbs img{aspect-ratio:4/3;object-fit:cover;object-position:top left}
+.lb{background:var(--surface);border-radius:14px;padding:16px;max-width:1100px;width:100%;max-height:92vh;display:grid;gap:12px;grid-template-rows:auto minmax(0,1fr) auto}
+.lb img{width:100%;height:100%;max-height:72vh;object-fit:contain;border-radius:8px;background:var(--soft)}
+.lb-top{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.lb-cap{font-size:14px;color:var(--muted)}
+.lb-nav{display:flex;justify-content:space-between;gap:12px}
+@media (max-width:880px){.card.wide{grid-template-columns:1fr}}
+.card.wide ~ .soon{grid-column:1/-1;min-height:0;padding:18px}
