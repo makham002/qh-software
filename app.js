@@ -21,7 +21,7 @@ const CATEGORIES = [
   }
 ];
 
-const CONTACT = { whatsapp: "", email: "qazihussain0594@gmail.com" };
+const CONTACT = { whatsapp: "0326 9195680", email: "qazihussain0594@gmail.com" };
 
 const PAY = [
   { id:"jazzcash", name:"JazzCash", note:"Mobile wallet transfer", to:"JazzCash · 0326 9195680" },

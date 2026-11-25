@@ -132,7 +132,7 @@ details p{margin-top:10px;color:var(--muted)}
 .cline div{min-width:0}
 .cline b{display:block;font-size:13px;color:var(--muted);font-weight:500}
 .cline span{font-family:var(--mono);font-size:15px;word-break:break-all}
-.copy-btn{font:600 13px var(--body);background:transparent;border:1px solid var(--line);color:var(--ink);border-radius:8px;padding:6px 10px;cursor:pointer}
+.copy-btn{font:600 13px var(--body);background:transparent;border:1px solid var(--line);color:var(--ink);border-radius:8px;padding:6px 10px;cursor:pointer;text-decoration:none;white-space:nowrap}
 form{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:24px;display:grid;gap:14px;min-width:0}
 .two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 label{display:grid;gap:6px;font-size:14px;font-weight:500}
