@@ -166,8 +166,9 @@ footer .wrap{padding-block:28px;display:flex;justify-content:space-between;gap:1
 @media (max-width:520px){
   .steps,.two{grid-template-columns:1fr}
   .grid{grid-template-columns:1fr}
-  .navlinks{gap:12px}
-  .navlinks a{font-size:14px}
+  .navlinks{gap:16px;flex-wrap:nowrap;overflow-x:auto;width:100%;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+  .navlinks::-webkit-scrollbar{display:none}
+  .navlinks a{font-size:14px;white-space:nowrap}
 }
 
 .band{background:var(--surface);border-block:1px solid var(--line)}
