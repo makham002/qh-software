@@ -81,6 +81,8 @@ function render(){
       </div></div></section>`;
   }).join("");
   nav.insertAdjacentHTML("afterbegin", CATEGORIES.map(c => `<a href="#${esc(c.id)}">${esc(c.short)}</a>`).join(""));
+  const aboutLink = nav.querySelector('a[href="#about"]');
+  if (aboutLink) nav.prepend(aboutLink);
   document.getElementById("count").textContent = total;
 }
 render();

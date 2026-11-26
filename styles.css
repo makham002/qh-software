@@ -92,7 +92,7 @@ section{scroll-margin-top:80px}
 
 /* about */
 .about{background:var(--surface);border-block:1px solid var(--line)}
-.about .wrap{padding-block:64px;display:grid;grid-template-columns:280px 1fr;gap:48px;align-items:start}
+.about .wrap{padding-block:64px;display:grid;grid-template-columns:minmax(0,1fr) 260px;gap:48px;align-items:center}
 .avatar{aspect-ratio:1;max-width:100%;border-radius:20px;background:linear-gradient(135deg,var(--accent),color-mix(in srgb,var(--accent) 50%,var(--tag)));display:grid;place-items:center;font-family:var(--display);font-size:88px;font-weight:800;color:var(--accent-ink)}
 .about h2{font-size:clamp(30px,4vw,42px)}
 .about .copy{display:grid;gap:16px;max-width:65ch;min-width:0}
@@ -199,3 +199,9 @@ footer .wrap{padding-block:28px;display:flex;justify-content:space-between;gap:1
 .lb-nav{display:flex;justify-content:space-between;gap:12px}
 @media (max-width:880px){.card.wide{grid-template-columns:1fr}}
 .card.wide ~ .soon{grid-column:1/-1;min-height:0;padding:18px}
+
+.portrait{margin:0;display:grid;justify-items:center;gap:14px;text-align:center}
+.portrait img{width:240px;height:240px;max-width:100%;border-radius:50%;object-fit:cover;border:5px solid var(--surface);box-shadow:0 0 0 2px var(--accent),0 18px 40px -20px rgba(0,0,0,.45)}
+.portrait figcaption{font-family:var(--display);font-weight:700;font-size:18px;display:grid;gap:2px}
+.portrait figcaption span{font-family:var(--body);font-weight:500;font-size:14px;color:var(--muted)}
+@media (max-width:880px){.portrait img{width:200px;height:200px}}
