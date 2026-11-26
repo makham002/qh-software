@@ -120,7 +120,7 @@ function render(){
 render();
 
 /* download counts for the free books (hidden if unavailable) */
-fetch("/api/downloads").then(r => r.ok ? r.json() : {}).then(counts => {
+fetch("/api/downloads", { cache: "no-store" }).then(r => r.ok ? r.json() : {}).then(counts => {
   document.querySelectorAll(".dl-count").forEach(el => {
     const n = Number(counts[el.dataset.book]) || 0;
     if (!Object.keys(counts).length) return;

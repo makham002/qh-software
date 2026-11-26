@@ -2,7 +2,7 @@ import { ensureTables } from "../_counter.js";
 
 // GET /api/downloads -> {"book-name": 12, ...}
 export async function onRequestGet({ env }) {
-  const headers = { "Content-Type": "application/json", "Cache-Control": "public, max-age=60" };
+  const headers = { "Content-Type": "application/json", "Cache-Control": "no-store" };
   if (!env.DB) return new Response("{}", { headers });
   try {
     await ensureTables(env.DB);
