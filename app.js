@@ -108,6 +108,7 @@ function render(){
           <div><h3>${esc(b.title)}</h3><span class="label">${esc(b.subtitle)}</span><p class="desc">${esc(b.desc)}</p></div>
           <div class="meta">${b.tags.map(x => `<span class="chip">${esc(x)}</span>`).join("")}</div>
           <div class="actions"><a class="btn" href="${esc(b.file)}" download>Download free PDF</a></div>
+          <p class="dl-count" data-book="${esc(b.file.split("/").pop().replace(/\.pdf$/, ""))}" hidden></p>
         </div>
       </article>`).join("")}
     </div></div></section>`);
@@ -117,6 +118,16 @@ function render(){
   document.getElementById("count").textContent = total;
 }
 render();
+
+/* download counts for the free books (hidden if unavailable) */
+fetch("/api/downloads").then(r => r.ok ? r.json() : {}).then(counts => {
+  document.querySelectorAll(".dl-count").forEach(el => {
+    const n = Number(counts[el.dataset.book]) || 0;
+    if (!Object.keys(counts).length) return;
+    el.textContent = n ? n.toLocaleString("en-PK") + (n === 1 ? " download" : " downloads") : "New book";
+    el.hidden = false;
+  });
+}).catch(() => {});
 
 /* checkout dialog */
 const overlay = document.getElementById("overlay");

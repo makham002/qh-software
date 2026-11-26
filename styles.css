@@ -215,3 +215,5 @@ footer .wrap{padding-block:28px;display:flex;justify-content:space-between;gap:1
 #books .grid{grid-template-columns:repeat(auto-fill,minmax(min(100%,460px),1fr))}
 .card.book .desc{margin-top:8px}
 @media (max-width:420px){.card.book{grid-template-columns:96px minmax(0,1fr);gap:14px}.card.book .cover{width:96px}}
+.card.book .dl-count{font-family:var(--mono);font-size:12.5px;color:var(--muted);margin-top:-4px}
+.card.book .dl-count::before{content:"↓ ";color:var(--accent)}
