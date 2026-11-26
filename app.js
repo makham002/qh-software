@@ -40,7 +40,7 @@ const CATEGORIES = [
 ];
 
 /* ---------------------------------------------------------------
-   FREE BOOKS. To add a book, put the PDF in /books and a cover
+   BOOKS. To add a book, put the PDF in /books and a cover
    image in /img, then add one entry here.
 ---------------------------------------------------------------- */
 const BOOKS = [
@@ -100,14 +100,14 @@ function render(){
       </div></div></section>`;
   }).join("");
   main.insertAdjacentHTML("beforeend", `<section class="shelf" id="books"><div class="wrap">
-    <div class="shelf-head"><div><span class="label">Free · ${BOOKS.length} books</span><h2>Free books</h2><p>Books I've written in English and Urdu. Download the PDF free, no sign-up needed.</p></div></div>
+    <div class="shelf-head"><div><span class="label">${BOOKS.length} books</span><h2>Books</h2><p>Books I've written in English and Urdu. Download the PDF, no sign-up needed.</p></div></div>
     <div class="grid">${BOOKS.map(b => `
       <article class="card book">
         <img class="cover" src="${esc(b.cover)}" width="440" height="625" alt="Cover of ${esc(b.title)}" loading="lazy">
         <div class="card-info">
           <div><h3>${esc(b.title)}</h3><span class="label">${esc(b.subtitle)}</span><p class="desc">${esc(b.desc)}</p></div>
           <div class="meta">${b.tags.map(x => `<span class="chip">${esc(x)}</span>`).join("")}</div>
-          <div class="actions"><a class="btn" href="${esc(b.file)}" download>Download free PDF</a></div>
+          <div class="actions"><a class="btn" href="${esc(b.file)}" download>Download PDF</a></div>
           <p class="dl-count" data-book="${esc(b.file.split("/").pop().replace(/\.pdf$/, ""))}" hidden></p>
         </div>
       </article>`).join("")}
@@ -119,7 +119,7 @@ function render(){
 }
 render();
 
-/* download counts for the free books (hidden if unavailable) */
+/* download counts for the books (hidden if unavailable) */
 fetch("/api/downloads", { cache: "no-store" }).then(r => r.ok ? r.json() : {}).then(counts => {
   document.querySelectorAll(".dl-count").forEach(el => {
     const n = Number(counts[el.dataset.book]) || 0;
