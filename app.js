@@ -51,7 +51,11 @@ const BOOKS = [
   { title: "AI Projects Lab", subtitle: "10 Hands-On Projects",
     desc: "Book 2: build ten real AI projects step by step, from a study assistant to your own chatbot, with free tools.",
     cover: "/img/book-ai-projects-lab.webp", file: "/books/ai-projects-lab.pdf",
-    tags: ["English + Urdu", "54 pages", "PDF · 2.6 MB"] }
+    tags: ["English + Urdu", "54 pages", "PDF · 2.6 MB"] },
+  { title: "Reading the Candles", subtitle: "Crypto technical analysis · Volume One",
+    desc: "Learn to read a crypto price chart: candlesticks, patterns, support and resistance. Education only, not financial advice.",
+    cover: "/img/book-reading-the-candles.webp", file: "/books/reading-the-candles.pdf",
+    tags: ["English + Urdu", "184 pages", "PDF · 4.0 MB"] }
 ];
 
 const CONTACT = { whatsapp: "0326 9195680", email: "makham002@gmail.com" };
