@@ -39,6 +39,21 @@ const CATEGORIES = [
   }
 ];
 
+/* ---------------------------------------------------------------
+   FREE BOOKS. To add a book, put the PDF in /books and a cover
+   image in /img, then add one entry here.
+---------------------------------------------------------------- */
+const BOOKS = [
+  { title: "Agentic AI", subtitle: "A Complete Beginner's Guide",
+    desc: "What AI and AI agents are and how to use them, from school to career. Written for Class 8 to 12 students.",
+    cover: "/img/book-agentic-ai.webp", file: "/books/agentic-ai-beginners-guide.pdf",
+    tags: ["English + Urdu", "42 pages", "PDF · 3.0 MB"] },
+  { title: "AI Projects Lab", subtitle: "10 Hands-On Projects",
+    desc: "Book 2: build ten real AI projects step by step, from a study assistant to your own chatbot, with free tools.",
+    cover: "/img/book-ai-projects-lab.webp", file: "/books/ai-projects-lab.pdf",
+    tags: ["English + Urdu", "54 pages", "PDF · 2.6 MB"] }
+];
+
 const CONTACT = { whatsapp: "0326 9195680", email: "makham002@gmail.com" };
 
 const PAY = [
@@ -80,7 +95,19 @@ function render(){
         <div class="card soon"><h3>${cat.products.length ? "More coming soon" : "First app coming soon"}</h3><p>New ${esc(cat.short.toLowerCase())} apps are added regularly. Have an idea? <a href="#contact">Tell me</a>.</p></div>
       </div></div></section>`;
   }).join("");
-  nav.insertAdjacentHTML("afterbegin", CATEGORIES.map(c => `<a href="#${esc(c.id)}">${esc(c.short)}</a>`).join(""));
+  main.insertAdjacentHTML("beforeend", `<section class="shelf" id="books"><div class="wrap">
+    <div class="shelf-head"><div><span class="label">Free · ${BOOKS.length} books</span><h2>Free books</h2><p>Books I've written in English and Urdu. Download the PDF free, no sign-up needed.</p></div></div>
+    <div class="grid">${BOOKS.map(b => `
+      <article class="card book">
+        <img class="cover" src="${esc(b.cover)}" width="440" height="625" alt="Cover of ${esc(b.title)}" loading="lazy">
+        <div class="card-info">
+          <div><h3>${esc(b.title)}</h3><span class="label">${esc(b.subtitle)}</span><p class="desc">${esc(b.desc)}</p></div>
+          <div class="meta">${b.tags.map(x => `<span class="chip">${esc(x)}</span>`).join("")}</div>
+          <div class="actions"><a class="btn" href="${esc(b.file)}" download>Download free PDF</a></div>
+        </div>
+      </article>`).join("")}
+    </div></div></section>`);
+  nav.insertAdjacentHTML("afterbegin", CATEGORIES.map(c => `<a href="#${esc(c.id)}">${esc(c.short)}</a>`).join("") + `<a href="#books">Books</a>`);
   const aboutLink = nav.querySelector('a[href="#about"]');
   if (aboutLink) nav.prepend(aboutLink);
   document.getElementById("count").textContent = total;
