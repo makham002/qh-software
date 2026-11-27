@@ -217,3 +217,35 @@ footer .wrap{padding-block:28px;display:flex;justify-content:space-between;gap:1
 @media (max-width:420px){.card.book{grid-template-columns:96px minmax(0,1fr);gap:14px}.card.book .cover{width:96px}}
 .card.book .dl-count{font-family:var(--mono);font-size:12.5px;color:var(--muted);margin-top:-4px}
 .card.book .dl-count::before{content:"↓ ";color:var(--accent)}
+
+/* SEO landing pages (/tailor-software/, /ur/darzi-software/) */
+.lp-hero .wrap{padding-block:40px 32px;display:grid;gap:16px;justify-items:start}
+.lp-hero h1{font-size:clamp(34px,5.4vw,58px);font-weight:800;letter-spacing:-.02em;max-width:20ch}
+.lp-hero h1 em{font-style:normal;color:var(--accent)}
+.lp-hero .lead{font-size:18px;color:var(--muted);max-width:60ch}
+.lp-hero .cta,.lp-end{display:flex;gap:12px;flex-wrap:wrap}
+.lp-end{margin-top:28px}
+.crumbs{font-size:14px;color:var(--muted)}
+.crumbs a{color:var(--muted)}
+.lp-price{font-size:16px;color:var(--muted)}
+.lp-price b{color:var(--tag-ink);background:var(--tag);padding:2px 8px;border-radius:6px;font-size:15px}
+.lp-shot{margin-top:12px;width:100%;height:auto;border:1px solid var(--line);border-radius:12px;box-shadow:0 24px 60px -30px rgba(0,0,0,.35)}
+.lp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr));gap:20px}
+.lp-item{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:22px;display:grid;gap:8px;align-content:start}
+.lp-item h3{font-size:20px}
+.lp-item p{color:var(--muted);font-size:15px}
+.lp-shots{display:grid;gap:24px;grid-template-columns:repeat(auto-fit,minmax(min(100%,460px),1fr));align-items:start}
+.lp-shots figure{margin:0;display:grid;gap:8px}
+.lp-shots img{width:100%;height:auto;border:1px solid var(--line);border-radius:10px}
+.lp-shots figcaption{font-size:14px;color:var(--muted)}
+.navlinks .lang{color:var(--accent);font-weight:600}
+footer a{color:var(--muted)}
+[dir="rtl"] body,body:lang(ur){font-family:"Noto Nastaliq Urdu", var(--body);line-height:2.1}
+:lang(ur) h1,:lang(ur) h2,:lang(ur) h3,:lang(ur) .btn,:lang(ur) summary{font-family:"Noto Nastaliq Urdu", var(--display);line-height:1.9}
+:lang(ur) .label{font-family:"Noto Nastaliq Urdu", var(--body);letter-spacing:0;text-transform:none;font-size:13px}
+:lang(ur) .lp-hero h1{font-size:clamp(28px,4.4vw,46px);letter-spacing:0;line-height:1.9}
+:lang(ur) .shelf-head h2{font-size:clamp(24px,3.4vw,34px)}
+:lang(ur) .lp-item h3{font-size:18px}
+[dir="rtl"] .brand,[dir="rtl"] [lang="en"]{font-family:var(--display);line-height:1.2}
+[dir="rtl"] .navlinks .lang{font-family:var(--body)}
+[dir="rtl"] .mono{font-family:var(--mono)}
