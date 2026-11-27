@@ -22,6 +22,7 @@ const CATEGORIES = [
           "Printable order receipt for every customer",
           "Dashboard with daily stats, pending orders and revenue",
           "Automatic weekly backup of all your data",
+          "Syncs with the Tailors Android app, so your phone has the same customers and orders",
           "Offline license, locked to your computer"
         ],
         shots: [
@@ -35,8 +36,32 @@ const CATEGORIES = [
   },
   {
     id: "mobile", name: "Mobile software", short: "Mobile",
-    blurb: "Android apps. Install link and license arrive on WhatsApp.",
-    products: []
+    blurb: "Android apps. Download the app here; your license key arrives on WhatsApp after payment.",
+    products: [
+      { name: "Tailors for Android", price: 5000, priceNote: "Lifetime access",
+        addon: { name: "AI photo-fill", price: 200, per: "month", note: "optional" },
+        phone: true,
+        download: { href: "/downloads/tailors-android.apk", id: "tailors-android", label: "Download app (APK)" },
+        tags: ["Android phone", "Urdu interface", "Syncs with Tailors for Windows"],
+        desc: "The Tailors shop app on your phone, in Urdu. Take a customer's measurements at the counter, check an order from anywhere, and send the receipt on WhatsApp.",
+        features: [
+          "Customers with photos, search by name or mobile number",
+          "Orders from booking to delivery: karegar, dates, status and balance",
+          "Full suit measurements for Qameez/Shalwar, Coat and Waistcoat",
+          "AI photo-fill: photograph a handwritten slip and the measurements fill in (Rs 200 a month, optional)",
+          "Receipt sent as a picture on WhatsApp",
+          "Links to your shop's Windows PC: customers and orders stay the same on both",
+          "Use it on its own too, with a backup file you can keep on WhatsApp or Google Drive",
+          "License locked to your phone"
+        ],
+        shots: [
+          { src: "/img/tailors-android-dashboard.webp", caption: "Dashboard: customers, orders, ready and pending, earnings" },
+          { src: "/img/tailors-android-measurements.webp", caption: "Measurements, with AI photo-fill from a slip" },
+          { src: "/img/tailors-android-styles.webp", caption: "Collar, cuff, pockets, daman and other style choices" },
+          { src: "/img/tailors-android-customer.webp", caption: "A customer's details and orders" },
+          { src: "/img/tailors-android-orders.webp", caption: "All orders with karegar, dates and status" }
+        ] }
+    ]
   }
 ];
 
@@ -78,21 +103,27 @@ function render(){
     total += cat.products.length;
     const cards = cat.products.map((p, pi) => `
       <article class="card${p.shots ? " wide" : ""}">
-        ${p.shots ? `<div class="shots">
+        ${p.shots && p.phone ? `<div class="shots phone-shots">
+          <div class="phone-row">${p.shots.map((s, si) => `<button type="button" data-shot="${ci}:${pi}:${si}" aria-label="${esc(s.caption)}"><img src="${esc(s.src)}" alt="${esc(s.caption)}" loading="lazy"></button>`).join("")}</div>
+          <p class="tiny-muted">Tap a screenshot to enlarge. Demo shop with made-up customers.</p>
+        </div>` : p.shots ? `<div class="shots">
           <button class="shot-main" type="button" data-shot="${ci}:${pi}:0" aria-label="View screenshots of ${esc(p.name)}"><img src="${esc(p.shots[0].src)}" alt="${esc(p.shots[0].caption)}"></button>
           <div class="thumbs">${p.shots.map((s, si) => `<button type="button" data-shot="${ci}:${pi}:${si}" aria-label="${esc(s.caption)}"><img src="${esc(s.src)}" alt="" loading="lazy"></button>`).join("")}</div>
           <p class="tiny-muted">Tap a screenshot to enlarge. Customer details are blurred.</p>
         </div>` : ""}
         <div class="card-info">
-        <div class="card-top"><div class="icon">${esc(p.name[0])}</div><span class="price">${rs(p.price)}</span></div>${p.priceNote ? `<span class="label">${esc(p.priceNote)}</span>` : ""}
+        <div class="card-top"><div class="icon">${esc(p.name[0])}</div><span class="price">${rs(p.price)}</span></div>${p.priceNote ? `<span class="label">${esc(p.priceNote)}</span>` : ""}${p.addon ? `<span class="addon">+ ${esc(p.addon.name)}: ${rs(p.addon.price)} a ${esc(p.addon.per)}${p.addon.note ? ` (${esc(p.addon.note)})` : ""}</span>` : ""}
         <div><h3>${esc(p.name)}</h3><p class="desc">${esc(p.desc)}</p></div>
         <ul class="feats">${p.features.map(f => `<li>${esc(f)}</li>`).join("")}</ul>
         <div class="meta">${[...(p.tags || []), p.platform, p.version, p.size].filter(Boolean).map(x => `<span class="chip">${esc(x)}</span>`).join("")}</div>
         <div class="actions">
           <button class="btn" type="button" data-buy="${ci}:${pi}">Buy now</button>
+          ${p.download ? `<a class="btn ghost" href="${esc(p.download.href)}" download>${esc(p.download.label)}</a>` : ""}
           ${p.trial ? `<button class="btn ghost" type="button" data-trial="${esc(p.name)}">Free trial</button>` : ""}
           <a class="btn ghost" href="https://wa.me/92${CONTACT.whatsapp.replace(/\D/g, "").replace(/^0/, "")}" target="_blank" rel="noopener">Ask a question</a>
         </div>
+        ${p.download ? `<p class="tiny-muted">Install the app, then enter the license key you receive after payment. Android may ask you to allow installing from your browser: tap Settings, allow it, and go back.</p>
+        <p class="dl-count" data-book="${esc(p.download.id)}" data-label="app" hidden></p>` : ""}
         ${p.review ? `<a class="g-review" href="${esc(p.review)}" target="_blank" rel="noopener">${GLOGO}<span>Using ${esc(p.name)}? <b>Review us on Google</b></span></a>` : ""}
         </div>
       </article>`).join("");
@@ -127,7 +158,7 @@ fetch("/api/downloads", { cache: "no-store" }).then(r => r.ok ? r.json() : {}).t
   document.querySelectorAll(".dl-count").forEach(el => {
     const n = Number(counts[el.dataset.book]) || 0;
     if (!Object.keys(counts).length) return;
-    el.textContent = n ? n.toLocaleString("en-PK") + (n === 1 ? " download" : " downloads") : "New book";
+    el.textContent = n ? n.toLocaleString("en-PK") + (n === 1 ? " download" : " downloads") : (el.dataset.label === "app" ? "New app" : "New book");
     el.hidden = false;
   });
 }).catch(() => {});
@@ -151,7 +182,8 @@ function openBuy(ci, pi){
 }
 function showPayTo(i){
   const m = PAY[i];
-  document.getElementById("payto").innerHTML = `<span class="label">Send ${rs(current.price)} to</span><span class="mono">${esc(m.to)}</span><span class="tiny-muted">Name on account: Qazi Hussain Shah</span>`;
+  const addon = current.addon ? `<span class="tiny-muted">Want ${esc(current.addon.name)} too? Add ${rs(current.addon.price)} for each ${esc(current.addon.per)} and say so on WhatsApp.</span>` : "";
+  document.getElementById("payto").innerHTML = `<span class="label">Send ${rs(current.price)} to</span><span class="mono">${esc(m.to)}</span><span class="tiny-muted">Name on account: Qazi Hussain Shah</span>${addon}`;
 }
 document.addEventListener("click", e => {
   const b = e.target.closest("[data-buy]");

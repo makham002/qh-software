@@ -18,3 +18,8 @@
 
 /books/*
   Cache-Control: public, max-age=86400
+
+/downloads/*
+  Content-Type: application/vnd.android.package-archive
+  Content-Disposition: attachment
+  Cache-Control: public, max-age=300
