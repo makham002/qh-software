@@ -249,3 +249,5 @@ footer a{color:var(--muted)}
 [dir="rtl"] .brand,[dir="rtl"] [lang="en"]{font-family:var(--display);line-height:1.2}
 [dir="rtl"] .navlinks .lang{font-family:var(--body)}
 [dir="rtl"] .mono{font-family:var(--mono)}
+.cline span.plain{font-family:var(--body)}
+.lp-review{margin-top:20px;color:var(--muted);font-size:15px}
