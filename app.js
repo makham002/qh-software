@@ -221,6 +221,7 @@ const lb = document.getElementById("lightbox");
 let lbShots = [], lbIdx = 0;
 function showShot(){
   const s = lbShots[lbIdx];
+  lens.hidden = true;
   setZoom(1);
   document.getElementById("lb-img").src = s.src;
   document.getElementById("lb-img").alt = s.caption;
@@ -245,6 +246,7 @@ function setZoom(z, cx, cy){
   document.getElementById("lb-out").disabled = zoom <= 1;
   document.getElementById("lb-in").disabled = zoom >= 4;
   lbView.classList.toggle("zoomed", zoom > 1);
+  if (zoom > 1) lens.hidden = true;
   if (!lbImg.naturalWidth) return;
   // size the picture ourselves: "fit" = the whole screenshot inside the box
   const r = lbView.getBoundingClientRect();
@@ -272,6 +274,28 @@ document.getElementById("lb-fit").addEventListener("click", () => setZoom(1));
 lbView.addEventListener("dblclick", e => { e.preventDefault(); setZoom(zoom === 1 ? 2 : 1, e.clientX, e.clientY); });
 lbImg.addEventListener("load", () => setZoom(zoom));
 window.addEventListener("resize", () => { if (!lb.hidden) setZoom(zoom); });
+/* magnifier: on a computer, a round lens follows the mouse and shows that
+   part of the screenshot enlarged (only at 100%; phones use + / − instead) */
+const lens = document.getElementById("lb-lens");
+const canHover = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+function moveLens(e){
+  const ir = lbImg.getBoundingClientRect(), vr = lbView.getBoundingClientRect();
+  const x = e.clientX - ir.left, y = e.clientY - ir.top;
+  if (zoom !== 1 || drag || x < 0 || y < 0 || x > ir.width || y > ir.height){ lens.hidden = true; return; }
+  const size = lens.offsetWidth || 240;
+  // enlarge about to the screenshot's real sharpness (2× to 4×)
+  const LENS_ZOOM = Math.min(4, Math.max(2, (lbImg.naturalWidth / ir.width) * 1.15));
+  lens.hidden = false;
+  lens.style.backgroundImage = `url("${lbImg.currentSrc || lbImg.src}")`;
+  lens.style.backgroundSize = `${ir.width * LENS_ZOOM}px ${ir.height * LENS_ZOOM}px`;
+  lens.style.backgroundPosition = `${-(x * LENS_ZOOM - size / 2)}px ${-(y * LENS_ZOOM - size / 2)}px`;
+  lens.style.left = (e.clientX - vr.left + lbView.scrollLeft - size / 2) + "px";
+  lens.style.top = (e.clientY - vr.top + lbView.scrollTop - size / 2) + "px";
+}
+if (canHover){
+  lbView.addEventListener("mousemove", moveLens);
+  lbView.addEventListener("mouseleave", () => { lens.hidden = true; });
+}
 let drag = null;
 lbView.addEventListener("pointerdown", e => {
   if (zoom === 1 || e.pointerType !== "mouse") return;
