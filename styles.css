@@ -251,3 +251,8 @@ footer a{color:var(--muted)}
 [dir="rtl"] .mono{font-family:var(--mono)}
 .cline span.plain{font-family:var(--body)}
 .lp-review{margin-top:20px;color:var(--muted);font-size:15px}
+.g-review{display:flex;align-items:center;justify-content:center;gap:10px;padding:11px 14px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);text-decoration:none;font-size:14.5px;text-align:center}
+.g-review b{color:var(--accent);font-weight:600}
+.g-review:hover{border-color:var(--accent)}
+.g-logo{flex:none;background:#fff;border-radius:50%;padding:2px;width:24px;height:24px}
+.g-review b{white-space:nowrap}

@@ -10,6 +10,7 @@ const CATEGORIES = [
     blurb: "Desktop software for Windows 10 and 11. Pay once for lifetime access.",
     products: [
       { name: "Tailors", price: 10000, priceNote: "Lifetime access",
+        review: "https://g.page/r/CXBnrS7RdWSeEBM/review",
         tags: ["Windows desktop", "Works fully offline", "Urdu interface"],
         desc: "Complete shop management for tailors, in Urdu. Keep every customer's measurements, track each order from booking to delivery, and see the day's earnings at a glance.",
         features: [
@@ -65,6 +66,7 @@ const PAY = [
   { id:"easypaisa", name:"Easypaisa", note:"Mobile wallet transfer", to:"Easypaisa · 0313 9228002" }
 ];
 
+const GLOGO = `<svg class="g-logo" viewBox="0 0 48 48" width="20" height="20" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9.1 3.6l6.8-6.8C35.8 2.4 30.3 0 24 0 14.6 0 6.6 5.4 2.6 13.2l7.9 6.2C12.4 13.7 17.7 9.5 24 9.5z"/><path fill="#4285F4" d="M46.5 24.5c0-1.6-.1-3.1-.4-4.5H24v9h12.7c-.6 2.9-2.2 5.4-4.7 7.1l7.6 5.9c4.4-4.1 6.9-10.1 6.9-17.5z"/><path fill="#FBBC05" d="M10.5 28.6c-.5-1.4-.8-3-.8-4.6s.3-3.2.8-4.6l-7.9-6.2C.9 16.6 0 20.2 0 24s.9 7.4 2.6 10.8l7.9-6.2z"/><path fill="#34A853" d="M24 48c6.5 0 11.9-2.1 15.9-5.8l-7.6-5.9c-2.1 1.4-4.9 2.3-8.3 2.3-6.3 0-11.6-4.2-13.5-9.9l-7.9 6.2C6.6 42.6 14.6 48 24 48z"/></svg>`;
 const rs = n => "Rs " + n.toLocaleString("en-PK");
 const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 
@@ -91,6 +93,7 @@ function render(){
           ${p.trial ? `<button class="btn ghost" type="button" data-trial="${esc(p.name)}">Free trial</button>` : ""}
           <a class="btn ghost" href="https://wa.me/92${CONTACT.whatsapp.replace(/\D/g, "").replace(/^0/, "")}" target="_blank" rel="noopener">Ask a question</a>
         </div>
+        ${p.review ? `<a class="g-review" href="${esc(p.review)}" target="_blank" rel="noopener">${GLOGO}<span>Using ${esc(p.name)}? <b>Review us on Google</b></span></a>` : ""}
         </div>
       </article>`).join("");
     return `<section class="shelf" id="${esc(cat.id)}"><div class="wrap">
