@@ -36,12 +36,13 @@ const CATEGORIES = [
   },
   {
     id: "mobile", name: "Mobile software", short: "Mobile",
-    blurb: "Android apps. Download the app here; your license key arrives on WhatsApp after payment.",
+    blurb: "Android apps. The install file and your license key arrive on WhatsApp after payment.",
     products: [
       { name: "Tailors for Android", price: 5000, priceNote: "Lifetime access",
         addon: { name: "AI photo-fill", price: 200, per: "month", note: "optional" },
         phone: true,
-        download: { href: "/downloads/tailors-android.apk", id: "tailors-android", label: "Download app (APK)" },
+        // Download button: turn on once /downloads/tailors-android.apk has been added
+        // download: { href: "/downloads/tailors-android.apk", id: "tailors-android", label: "Download app (APK)" },
         tags: ["Android phone", "Urdu interface", "Syncs with Tailors for Windows"],
         desc: "The Tailors shop app on your phone, in Urdu. Take a customer's measurements at the counter, check an order from anywhere, and send the receipt on WhatsApp.",
         features: [
