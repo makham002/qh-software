@@ -106,7 +106,7 @@ function render(){
       <article class="card${p.shots ? " wide" : ""}">
         ${p.shots && p.phone ? `<div class="shots phone-shots">
           <div class="phone-row">${p.shots.map((s, si) => `<button type="button" data-shot="${ci}:${pi}:${si}" aria-label="${esc(s.caption)}"><img src="${esc(s.src)}" alt="${esc(s.caption)}" loading="lazy"></button>`).join("")}</div>
-          <p class="tiny-muted">Tap a screenshot to enlarge. Demo shop with made-up customers.</p>
+          <p class="tiny-muted">Tap a screenshot to enlarge.</p>
         </div>` : p.shots ? `<div class="shots">
           <button class="shot-main" type="button" data-shot="${ci}:${pi}:0" aria-label="View screenshots of ${esc(p.name)}"><img src="${esc(p.shots[0].src)}" alt="${esc(p.shots[0].caption)}"></button>
           <div class="thumbs">${p.shots.map((s, si) => `<button type="button" data-shot="${ci}:${pi}:${si}" aria-label="${esc(s.caption)}"><img src="${esc(s.src)}" alt="" loading="lazy"></button>`).join("")}</div>
@@ -221,6 +221,7 @@ const lb = document.getElementById("lightbox");
 let lbShots = [], lbIdx = 0;
 function showShot(){
   const s = lbShots[lbIdx];
+  setZoom(1);
   document.getElementById("lb-img").src = s.src;
   document.getElementById("lb-img").alt = s.caption;
   document.getElementById("lb-cap").textContent = s.caption + "  (" + (lbIdx + 1) + " of " + lbShots.length + ")";
@@ -230,8 +231,59 @@ document.addEventListener("click", e => {
   if (!t) return;
   const [ci, pi, si] = t.dataset.shot.split(":").map(Number);
   lbShots = CATEGORIES[ci].products[pi].shots; lbIdx = si; showShot();
-  lb.hidden = false; document.getElementById("lb-close").focus();
+  lb.hidden = false; setZoom(1); document.getElementById("lb-close").focus();
 });
+/* zoom: + / − buttons, the % button fits the whole screenshot again,
+   double-click (double-tap) zooms in on that spot, drag to move around */
+const lbView = document.getElementById("lb-view"), lbImg = document.getElementById("lb-img");
+const ZOOMS = [1, 1.5, 2, 3, 4];
+let zoom = 1;
+function setZoom(z, cx, cy){
+  const prev = zoom;
+  zoom = Math.min(4, Math.max(1, z));
+  document.getElementById("lb-fit").textContent = Math.round(zoom * 100) + "%";
+  document.getElementById("lb-out").disabled = zoom <= 1;
+  document.getElementById("lb-in").disabled = zoom >= 4;
+  lbView.classList.toggle("zoomed", zoom > 1);
+  if (!lbImg.naturalWidth) return;
+  // size the picture ourselves: "fit" = the whole screenshot inside the box
+  const r = lbView.getBoundingClientRect();
+  if (zoom === 1){
+    const fit1 = Math.min(r.width / lbImg.naturalWidth, r.height / lbImg.naturalHeight);
+    lbImg.style.width = Math.round(lbImg.naturalWidth * fit1) + "px";
+    lbImg.style.height = Math.round(lbImg.naturalHeight * fit1) + "px";
+    lbView.scrollTop = lbView.scrollLeft = 0;
+    return;
+  }
+  // keep the point under (cx, cy) — or the middle — in place while zooming
+  const px = cx == null ? r.width / 2 : cx - r.left, py = cy == null ? r.height / 2 : cy - r.top;
+  const fx = (lbView.scrollLeft + px) / Math.max(1, lbView.scrollWidth), fy = (lbView.scrollTop + py) / Math.max(1, lbView.scrollHeight);
+  const fit = Math.min(r.width / lbImg.naturalWidth, r.height / lbImg.naturalHeight);
+  lbImg.style.width = Math.round(lbImg.naturalWidth * fit * zoom) + "px";
+  lbImg.style.height = Math.round(lbImg.naturalHeight * fit * zoom) + "px";
+  if (prev === 1){ lbView.scrollLeft = fx * lbView.scrollWidth - px; lbView.scrollTop = fy * lbView.scrollHeight - py; return; }
+  lbView.scrollLeft = fx * lbView.scrollWidth - px;
+  lbView.scrollTop = fy * lbView.scrollHeight - py;
+}
+const nextZoom = dir => dir > 0 ? (ZOOMS.find(z => z > zoom) || 4) : ([...ZOOMS].reverse().find(z => z < zoom) || 1);
+document.getElementById("lb-in").addEventListener("click", () => setZoom(nextZoom(1)));
+document.getElementById("lb-out").addEventListener("click", () => setZoom(nextZoom(-1)));
+document.getElementById("lb-fit").addEventListener("click", () => setZoom(1));
+lbView.addEventListener("dblclick", e => { e.preventDefault(); setZoom(zoom === 1 ? 2 : 1, e.clientX, e.clientY); });
+lbImg.addEventListener("load", () => setZoom(zoom));
+window.addEventListener("resize", () => { if (!lb.hidden) setZoom(zoom); });
+let drag = null;
+lbView.addEventListener("pointerdown", e => {
+  if (zoom === 1 || e.pointerType !== "mouse") return;
+  drag = { x: e.clientX, y: e.clientY, l: lbView.scrollLeft, t: lbView.scrollTop };
+  lbView.setPointerCapture(e.pointerId); lbView.classList.add("dragging");
+});
+lbView.addEventListener("pointermove", e => {
+  if (!drag) return;
+  lbView.scrollLeft = drag.l - (e.clientX - drag.x); lbView.scrollTop = drag.t - (e.clientY - drag.y);
+});
+const endDrag = () => { drag = null; lbView.classList.remove("dragging"); };
+lbView.addEventListener("pointerup", endDrag); lbView.addEventListener("pointercancel", endDrag);
 document.getElementById("lb-prev").addEventListener("click", () => { lbIdx = (lbIdx + lbShots.length - 1) % lbShots.length; showShot(); });
 document.getElementById("lb-next").addEventListener("click", () => { lbIdx = (lbIdx + 1) % lbShots.length; showShot(); });
 document.getElementById("lb-close").addEventListener("click", () => { lb.hidden = true; });
@@ -239,6 +291,9 @@ lb.addEventListener("click", e => { if (e.target === lb) lb.hidden = true; });
 document.addEventListener("keydown", e => {
   if (lb.hidden) return;
   if (e.key === "Escape") lb.hidden = true;
-  if (e.key === "ArrowLeft") document.getElementById("lb-prev").click();
-  if (e.key === "ArrowRight") document.getElementById("lb-next").click();
+  if (e.key === "+" || e.key === "=") setZoom(nextZoom(1));
+  if (e.key === "-") setZoom(nextZoom(-1));
+  if (e.key === "0") setZoom(1);
+  if (e.key === "ArrowLeft" && zoom === 1) document.getElementById("lb-prev").click();
+  if (e.key === "ArrowRight" && zoom === 1) document.getElementById("lb-next").click();
 });

@@ -143,8 +143,14 @@
 </div>
 <div class="overlay" id="lightbox" hidden>
   <div class="lb" role="dialog" aria-modal="true" aria-label="Screenshots">
-    <div class="lb-top"><span id="lb-cap" class="lb-cap"></span><button class="x" id="lb-close" aria-label="Close">×</button></div>
-    <img id="lb-img" src="" alt="">
+    <div class="lb-top"><span id="lb-cap" class="lb-cap"></span>
+      <div class="lb-tools">
+        <button class="lb-z" id="lb-out" type="button" aria-label="Zoom out">−</button>
+        <button class="lb-z lb-pct" id="lb-fit" type="button" aria-label="Fit the whole screenshot">100%</button>
+        <button class="lb-z" id="lb-in" type="button" aria-label="Zoom in">+</button>
+        <button class="x" id="lb-close" aria-label="Close">×</button>
+      </div></div>
+    <div class="lb-view" id="lb-view"><img id="lb-img" src="" alt=""></div>
     <div class="lb-nav"><button class="btn ghost" id="lb-prev" type="button">Previous</button><button class="btn ghost" id="lb-next" type="button">Next</button></div>
   </div>
 </div>
