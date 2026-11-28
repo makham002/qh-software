@@ -141,6 +141,11 @@ input,select,textarea{font:inherit;font-size:15px;padding:10px 12px;border-radiu
 textarea{min-height:110px;resize:vertical}
 .formmsg{font-size:14px;color:var(--accent);font-weight:600}
 .formmsg.bad{color:#C2410C}
+.quick{display:grid;gap:10px;border-top:1px solid var(--line);padding-top:16px;margin-top:4px}
+.quick-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.qbtn{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;min-height:84px;padding:12px 8px;border:1px solid var(--line);border-radius:12px;background:var(--bg);color:var(--ink);text-decoration:none;font:600 14px var(--body);text-align:center;line-height:1.25}
+.qbtn:hover{border-color:var(--accent)}
+.qbtn svg{width:28px;height:28px}
 .hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
 .contact .wa-main{justify-self:start}
 .icon.img{background:none;padding:0;overflow:hidden}
