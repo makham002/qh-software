@@ -153,7 +153,11 @@ textarea{min-height:110px;resize:vertical}
 
 footer{border-top:1px solid var(--line);color:var(--muted);font-size:14px}
 footer .wrap{padding-block:28px;display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}
-.fb-link{display:inline-flex;align-items:center;gap:6px;color:var(--ink);text-decoration:none;font-weight:600}
+.foot-left{display:grid;gap:8px}
+.foot-nav{display:flex;flex-wrap:wrap;gap:4px 6px}
+.foot-nav-ltr{justify-content:flex-end}
+.foot-follow{display:flex;align-items:center;gap:10px}
+.fb-link{display:inline-flex;align-items:center;gap:6px;color:var(--ink);text-decoration:none;font-weight:600;border:1px solid var(--line);border-radius:10px;padding:8px 14px;background:var(--surface)}
 .fb-link:hover{color:#1877F2}
 .fb-ico{color:#1877F2;flex:none}
 
