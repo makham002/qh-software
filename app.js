@@ -9,7 +9,7 @@ const CATEGORIES = [
     id: "windows", name: "Windows software", short: "Windows",
     blurb: "Desktop software for Windows 10 and 11. Pay once for lifetime access.",
     products: [
-      { name: "Tailors", price: 10000, priceNote: "Lifetime access",
+      { name: "Tailors", icon: "/img/tailors-icon.svg", price: 10000, priceNote: "Lifetime access",
         review: "https://g.page/r/CXBnrS7RdWSeEBM/review",
         tags: ["Windows desktop", "Works fully offline", "Urdu interface"],
         desc: "Complete shop management for tailors, in Urdu. Keep every customer's measurements, track each order from booking to delivery, and see the day's earnings at a glance.",
@@ -38,7 +38,7 @@ const CATEGORIES = [
     id: "mobile", name: "Mobile software", short: "Mobile",
     blurb: "Android apps. Download the app here; your license key arrives on WhatsApp after payment.",
     products: [
-      { name: "Tailors for Android", price: 5000, priceNote: "Lifetime access",
+      { name: "Tailors for Android", icon: "/img/tailors-android-icon.svg", price: 5000, priceNote: "Lifetime access",
         addon: { name: "AI photo-fill", price: 200, per: "month", note: "optional" },
         phone: true,
         // To release a new version: replace /downloads/tailors-android.apk (same file name)
@@ -113,7 +113,7 @@ function render(){
           <p class="tiny-muted">Tap a screenshot to enlarge. Customer details are blurred.</p>
         </div>` : ""}
         <div class="card-info">
-        <div class="card-top"><div class="icon">${esc(p.name[0])}</div><span class="price">${rs(p.price)}</span></div>${p.priceNote ? `<span class="label">${esc(p.priceNote)}</span>` : ""}${p.addon ? `<span class="addon">+ ${esc(p.addon.name)}: ${rs(p.addon.price)} a ${esc(p.addon.per)}${p.addon.note ? ` (${esc(p.addon.note)})` : ""}</span>` : ""}
+        <div class="card-top"><div class="icon${p.icon ? " img" : ""}">${p.icon ? `<img src="${esc(p.icon)}" width="48" height="48" alt="">` : esc(p.name[0])}</div><span class="price">${rs(p.price)}</span></div>${p.priceNote ? `<span class="label">${esc(p.priceNote)}</span>` : ""}${p.addon ? `<span class="addon">+ ${esc(p.addon.name)}: ${rs(p.addon.price)} a ${esc(p.addon.per)}${p.addon.note ? ` (${esc(p.addon.note)})` : ""}</span>` : ""}
         <div><h3>${esc(p.name)}</h3><p class="desc">${esc(p.desc)}</p></div>
         <ul class="feats">${p.features.map(f => `<li>${esc(f)}</li>`).join("")}</ul>
         <div class="meta">${[...(p.tags || []), p.platform, p.version, p.size].filter(Boolean).map(x => `<span class="chip">${esc(x)}</span>`).join("")}</div>
@@ -154,15 +154,24 @@ function render(){
 }
 render();
 
-/* download counts for the books (hidden if unavailable) */
+/* download counts: only shown once a book or app passes SHOW_COUNT_FROM
+   downloads, so small early numbers stay hidden. Counting keeps running. */
+const SHOW_COUNT_FROM = 50;
 fetch("/api/downloads", { cache: "no-store" }).then(r => r.ok ? r.json() : {}).then(counts => {
   document.querySelectorAll(".dl-count").forEach(el => {
     const n = Number(counts[el.dataset.book]) || 0;
-    if (!Object.keys(counts).length) return;
-    el.textContent = n ? n.toLocaleString("en-PK") + (n === 1 ? " download" : " downloads") : (el.dataset.label === "app" ? "New app" : "New book");
+    if (n < SHOW_COUNT_FROM) return;
+    el.textContent = n.toLocaleString("en-PK") + " downloads";
     el.hidden = false;
   });
 }).catch(() => {});
+
+/* hero example: the delivery date is always a few days from today */
+const due = document.getElementById("hero-due");
+if (due){
+  const d = new Date(Date.now() + 4 * 864e5);
+  due.textContent = d.toLocaleDateString("en-GB", { weekday: "short", day: "numeric", month: "short" });
+}
 
 /* checkout dialog */
 const overlay = document.getElementById("overlay");
@@ -207,13 +216,27 @@ document.getElementById("dlg-done").addEventListener("click", () => {
   m.hidden = false;
 });
 
-document.getElementById("contact-form").addEventListener("submit", e => {
+/* contact form: sends the message to the site (saved for Qazi to read).
+   If sending fails, the visitor is pointed to WhatsApp instead. */
+const cform = document.getElementById("contact-form");
+cform.addEventListener("submit", async e => {
   e.preventDefault();
   const v = id => document.getElementById(id).value.trim();
-  const subject = v("c-topic") + " – " + v("c-name");
-  const body = v("c-msg") + "\n\nName: " + v("c-name") + (v("c-phone") ? "\nWhatsApp: " + v("c-phone") : "");
-  document.getElementById("formmsg").hidden = false;
-  location.href = "mailto:" + CONTACT.email + "?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body);
+  const msg = document.getElementById("formmsg"), btn = cform.querySelector("button[type=submit]");
+  const show = (text, bad) => { msg.textContent = text; msg.classList.toggle("bad", !!bad); msg.hidden = false; };
+  if (!v("c-phone") && !v("c-email")){ show("Please add your WhatsApp number or email so I can reply.", true); return; }
+  btn.disabled = true; btn.textContent = "Sending…";
+  try {
+    const r = await fetch("/api/contact", { method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name: v("c-name"), phone: v("c-phone"), email: v("c-email"), topic: v("c-topic"), message: v("c-msg"), website: v("c-web") }) });
+    const data = await r.json().catch(() => ({}));
+    if (!r.ok || !data.ok) throw new Error(data.error || "failed");
+    cform.reset();
+    show("Thanks, your message was sent. I usually reply within a few hours. For a faster answer, message me on WhatsApp at " + CONTACT.whatsapp + ".");
+  } catch (err) {
+    show((err.message && err.message !== "failed" ? err.message + " " : "The message could not be sent. ") + "Please message me on WhatsApp at " + CONTACT.whatsapp + " instead.", true);
+  }
+  btn.disabled = false; btn.textContent = "Send message";
 });
 
 /* screenshot lightbox */

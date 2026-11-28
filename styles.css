@@ -140,6 +140,11 @@ label{display:grid;gap:6px;font-size:14px;font-weight:500}
 input,select,textarea{font:inherit;font-size:15px;padding:10px 12px;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--ink);width:100%}
 textarea{min-height:110px;resize:vertical}
 .formmsg{font-size:14px;color:var(--accent);font-weight:600}
+.formmsg.bad{color:#C2410C}
+.hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+.contact .wa-main{justify-self:start}
+.icon.img{background:none;padding:0;overflow:hidden}
+.icon.img img{width:48px;height:48px;display:block}
 
 footer{border-top:1px solid var(--line);color:var(--muted);font-size:14px}
 footer .wrap{padding-block:28px;display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}
@@ -275,3 +280,11 @@ footer a{color:var(--muted)}
 .phone-row img{aspect-ratio:9/19.5;object-fit:cover;object-position:top}
 @media (max-width:560px){.phone-row{grid-template-columns:none;grid-auto-flow:column;grid-auto-columns:42%;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:6px}.phone-row button{scroll-snap-align:start}}
 .addon{display:block;margin-top:4px;font-size:.85rem;color:var(--muted)}
+
+/* private /inbox page */
+.inbox main{padding-block:40px;display:grid;gap:16px;max-width:760px}
+.inbox form{max-width:380px}
+.msg{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px;display:grid;gap:10px}
+.msg-head{display:flex;flex-wrap:wrap;gap:10px;align-items:baseline}
+.msg-body{white-space:pre-wrap;overflow-wrap:anywhere}
+.msg-reply{display:flex;flex-wrap:wrap;gap:8px}

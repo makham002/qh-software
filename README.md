@@ -24,3 +24,12 @@ and serves the totals at `/api/downloads`. It needs a free D1 database:
 2. Workers & Pages > this Pages project > Settings > Bindings > Add > D1 database,
    variable name `DB`, database `qh-downloads`. Save, then redeploy.
 Without the binding the site still works and the counts are simply hidden.
+
+## Contact form messages
+The contact form posts to `/api/contact` (`functions/api/contact.js`), which saves
+each message in the same D1 database (`DB`), in a `messages` table. Spam guard:
+a hidden field bots fill in, and at most 5 messages per visitor per day.
+To read messages, open https://qazisoft.com/inbox and enter the inbox key.
+Set the key once: Workers & Pages > this Pages project > Settings >
+Variables and Secrets > Add, type Secret, name `INBOX_KEY`, any long password.
+Then redeploy.
